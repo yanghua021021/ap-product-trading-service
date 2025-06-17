@@ -1,6 +1,4 @@
-# product-trading-service
-
-商品交易服务
+github: https://github.com/yanghua021021/ap-product-trading-service
 
 1.代码工程结构:
 src/main/java
