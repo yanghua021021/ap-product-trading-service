@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.product.trading.merchant.mapper.MerchantAccountFlowMapper">
+
+    <select id="sumMerchantAccountFlowByCreateDt"
+            resultType="com.test.product.trading.merchant.entity.MerchantAccount">
+        select merchant_id, balance
+         ,tb1.create_dt as set_dt
+         ,case when tb1.balance = tb2.total_amount then '1' else '0' end currency
+        from
+        (select account_id, create_dt
+         ,sum(amount) balance
+         from merchant_account_flow
+         where create_dt = #{createDt}
+         and trd_type = 2
+         group by account_id, create_dt
+        ) tb1
+        left join
+        (select account_id, create_dt, merchant_id
+         ,sum(total_amount) total_amount
+         from
+         (select act.account_id, ord.*
+          from order_info ord
+          inner join
+          (select id account_id,merchant_id
+           from merchant_account
+           where set_dt = '99991231'
+          ) act
+          on ord.merchant_id = act.merchant_id
+          where create_dt = #{createDt}
+          and status = 1
+         ) tb001
+         group by account_id, create_dt, merchant_id
+        ) tb2
+        on  tb1.account_id = tb2.account_id
+        and tb1.create_dt = tb2.create_dt
+    </select>
+
+</mapper>

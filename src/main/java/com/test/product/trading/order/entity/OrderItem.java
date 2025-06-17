@@ -1,0 +1,66 @@
+package com.test.product.trading.order.entity;
+
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+
+/**
+ * <p>
+ * 订单明细表
+ * </p>
+ *
+ * @author yh
+ * @since 2025-06-15
+ */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@TableName("order_item")
+public class OrderItem implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
+
+    /**
+     * 订单id
+     */
+    private Long orderId;
+
+    /**
+     * 商品id
+     */
+    private Long productId;
+
+    /**
+     * 商品数量
+     */
+    private Integer quantity;
+
+    /**
+     * 商品单价
+     */
+    private BigDecimal price;
+
+    /**
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date updateTime;
+
+
+}
